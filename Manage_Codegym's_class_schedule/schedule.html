@@ -35,7 +35,6 @@
 <table>
     <thead>
     <tr>
-        <th>Session</th>
         <th>Time</th>
         <th>Monday</th>
         <th>Tuesday</th>
@@ -47,7 +46,6 @@
     </thead>
     <tbody>
     <tr>
-        <td rowspan="3">Morning</td>
         <td>6h30-8h</td>
         <td></td>
         <td></td>
@@ -75,7 +73,6 @@
         <td></td>
     </tr>
     <tr>
-        <td rowspan="3">Afternoon</td>
         <td>12h-1h30</td>
         <td></td>
         <td></td>
@@ -85,7 +82,7 @@
         <td></td>
     </tr>
     <tr>
-        <td>1h30-3h</td>
+        <td>13h30-15h</td>
         <td></td>
         <td></td>
         <td></td>
@@ -94,7 +91,7 @@
         <td></td>
     </tr>
     <tr>
-        <td>3h-4h30</td>
+        <td>15h-16h30</td>
         <td></td>
         <td></td>
         <td></td>
@@ -103,8 +100,7 @@
         <td></td>
     </tr>
     <tr>
-        <td rowspan="2">Evening</td>
-        <td>6h30-8h</td>
+        <td>18h30-20h</td>
         <td></td>
         <td></td>
         <td></td>
@@ -113,7 +109,7 @@
         <td></td>
     </tr>
     <tr>
-        <td>8h-9h30</td>
+        <td>20h-21h30</td>
         <td></td>
         <td></td>
         <td></td>
@@ -141,15 +137,14 @@
         <option value="8h-9h30">8h-9h30</option>
         <option value="9h30-11h">9h30-11h</option>
         <option value="12h-1h30">12h-1h30</option>
-        <option value="1h30-3h">1h30-3h</option>
-        <option value="3h-4h30">3h-4h30</option>
-        <option value="6h30-8h (Evening)">6h30-8h</option>
-        <option value="8h-9h30 (Evening)">8h-9h30</option>
+        <option value="1h30-3h">13h30-15h</option>
+        <option value="3h-4h30">15h-16h30</option>
+        <option value="6h30-8h (Evening)">18h30-20h</option>
+        <option value="8h-9h30 (Evening)">20h-21h30</option>
     </select>
     <button type="button" id="saveButton">SAVE</button>
     <button type="button" id="deleteButton">DELETE</button>
 </form>
-
 <script>
     const teacherInput = document.getElementById('teacher');
     const classIDInput = document.getElementById('classID');
@@ -160,8 +155,8 @@
     const scheduleTable = document.querySelector('table');
 
     function addSchedule() {
-        const teacher = teacherInput.value;
-        const classID = classIDInput.value;
+        const teacher = teacherInput.value.trim();
+        const classID = classIDInput.value.trim();
         const day = daySelect.value;
         const time = timeSelect.value;
 
@@ -171,7 +166,7 @@
         }
 
         const dayIndex = Array.from(scheduleTable.rows[0].cells).findIndex(cell => cell.textContent === day);
-        const timeRow = Array.from(scheduleTable.rows).find(row => row.cells[1]?.textContent === time);
+        const timeRow = Array.from(scheduleTable.rows).find(row => row.cells[0]?.textContent === time);
 
         if (!timeRow || dayIndex === -1) {
             alert('Invalid time or day selection.');
@@ -182,18 +177,19 @@
         cell.innerHTML = `<strong>${teacher}</strong><br>${classID}`;
         clearInputs();
     }
+
     function deleteSchedule() {
         const day = daySelect.value;
         const time = timeSelect.value;
         const dayIndex = Array.from(scheduleTable.rows[0].cells).findIndex(cell => cell.textContent === day);
-        const timeRow = Array.from(scheduleTable.rows).find(row => row.cells[1]?.textContent === time);
+        const timeRow = Array.from(scheduleTable.rows).find(row => row.cells[0]?.textContent === time);
 
         if (!timeRow || dayIndex === -1) {
             alert('Invalid time or day selection.');
             return;
         }
-        const cell = timeRow.cells[dayIndex];
 
+        const cell = timeRow.cells[dayIndex];
         if (!cell.textContent.trim()) {
             alert('This time slot is already empty.');
             return;
@@ -201,14 +197,75 @@
 
         cell.innerHTML = '';
     }
+
     function clearInputs() {
         teacherInput.value = '';
         classIDInput.value = '';
     }
+
     saveBtn.addEventListener('click', addSchedule);
     deleteBtn.addEventListener('click', deleteSchedule);
-
 </script>
+
+<!--<script>-->
+<!--    const teacherInput = document.getElementById('teacher');-->
+<!--    const classIDInput = document.getElementById('classID');-->
+<!--    const daySelect = document.getElementById('day');-->
+<!--    const timeSelect = document.getElementById('time');-->
+<!--    const saveBtn = document.getElementById('saveButton');-->
+<!--    const deleteBtn = document.getElementById('deleteButton');-->
+<!--    const scheduleTable = document.querySelector('table');-->
+
+<!--    function addSchedule() {-->
+<!--        const teacher = teacherInput.value;-->
+<!--        const classID = classIDInput.value;-->
+<!--        const day = daySelect.value;-->
+<!--        const time = timeSelect.value;-->
+
+<!--        if (!teacher || !classID) {-->
+<!--            alert('Please fill in both Teacher and ID Class.');-->
+<!--            return;-->
+<!--        }-->
+
+<!--        const dayIndex = Array.from(scheduleTable.rows[0].cells).findIndex(cell => cell.textContent === day);-->
+<!--        const timeRow = Array.from(scheduleTable.rows).find(row => row.cells[1]?.textContent === time);-->
+
+<!--        if (!timeRow || dayIndex === -1) {-->
+<!--            alert('Invalid time or day selection.');-->
+<!--            return;-->
+<!--        }-->
+
+<!--        const cell = timeRow.cells[dayIndex];-->
+<!--        cell.innerHTML = `<strong>${teacher}</strong><br>${classID}`;-->
+<!--        clearInputs();-->
+<!--    }-->
+<!--    function deleteSchedule() {-->
+<!--        const day = daySelect.value;-->
+<!--        const time = timeSelect.value;-->
+<!--        const dayIndex = Array.from(scheduleTable.rows[0].cells).findIndex(cell => cell.textContent === day);-->
+<!--        const timeRow = Array.from(scheduleTable.rows).find(row => row.cells[0]?.textContent === time);-->
+
+<!--        if (!timeRow || dayIndex === -1) {-->
+<!--            alert('Invalid time or day selection.');-->
+<!--            return;-->
+<!--        }-->
+<!--        const cell = timeRow.cells[dayIndex];-->
+
+<!--        if (!cell.textContent.trim()) {-->
+<!--            alert('This time slot is already empty.');-->
+<!--            return;-->
+<!--        }-->
+
+<!--        cell.innerHTML = '';-->
+<!--    }-->
+<!--    function clearInputs() {-->
+<!--        teacherInput.value = '';-->
+<!--        classIDInput.value = '';-->
+<!--    }-->
+<!--    saveBtn.addEventListener('click', addSchedule);-->
+<!--    deleteBtn.addEventListener('click', deleteSchedule);-->
+
+<!--</script>-->
 <script>
 </script>
 </body>
